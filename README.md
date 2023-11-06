@@ -3,7 +3,7 @@ by Bob Maple (bobm-matchbox [at] idolum.com)
 
 This script is licensed under the Creative Commons Attribution-ShareAlike [CC BY-SA](https://creativecommons.org/licenses/by-sa/4.0/)
 
-![Flame version](https://img.shields.io/badge/Flame-2023.1+-green)
+![Flame version 2023.1+](https://img.shields.io/badge/Flame-2023.1+-green)
 
 ## What
 
@@ -23,6 +23,10 @@ a new new entry on the context menu called **Project Tools**, and
 inside it you will find **Strip Avid Crap**. Run it, and it will walk
 through your selected items and rename any sequences it finds, removing
 the Avid `.Exported.01` garbage off the ends of the names.
+
+It also will rename video segments on the timeline removing additional
+Avid trash like `.sync.01` and `.new.01` from them. Note that currently
+this is only modifies video segments.
 
 **NOTE** that Strip Avid Crap only looks for sequences at the root level of
 the container(s) you select in the case of libraries, folders or reels.
