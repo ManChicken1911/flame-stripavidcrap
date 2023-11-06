@@ -1,16 +1,15 @@
 #!/bin/env python
 
 # StripAvidCrap.py by Bob Maple
-# VER: 2023-11-05
+# VER: 2023-11-06
 #
 # Takes a selection of libraries, folders, reels or sequences and renames
 # all sequences found, removing 'Exported.01' crap from the end.
-# Only looks for sequences at the root level of any selected libraries, folders.
 # For every sequence found, it also renames all clips on the sequence stripping
-# off 'sync.01' and 'new.01' from the clip names (only works on video segments)
+# off 'sync.01' and 'new.01' from the clip names.
 #
-# Note that if you run this on a reel on the Desktop, the names won't visually update
-# until you do something else in the UI (click something, etc)
+# Note that when a library, folder or reel is selected, it only looks for
+# sequences at the root level of the selected container.
 
 def get_media_panel_custom_ui_actions():
 
@@ -18,9 +17,6 @@ def get_media_panel_custom_ui_actions():
     import flame
     seq_count = 0
     seg_count = 0
-
-    # print( "dump of selection:" )
-    # print( sel )
 
     for curThing in sel:
 
@@ -43,11 +39,22 @@ def get_media_panel_custom_ui_actions():
 
           # Walk through the sequence and rename segments - video
           for curTrack in curSeq.versions[0].tracks:
-            for curSeg in curTrack.segments:
-              new_segname = StripAvidStr( curSeg.name.get_value() )
-              if new_segname:
-                curSeg.name.set_value( new_segname )
-                seg_count += 1
+            if( curTrack.locked == False ):
+              for curSeg in curTrack.segments:
+                new_segname = StripAvidStr( curSeg.name.get_value() )
+                if new_segname:
+                  curSeg.name.set_value( new_segname )
+                  seg_count += 1
+
+          # audio
+          for curTrack in curSeq.audio_tracks:
+            for curChan in curTrack.channels:
+              if( curChan.locked == False ):
+                for curSeg in curChan.segments:
+                  new_segname = StripAvidStr( curSeg.name.get_value() )
+                  if new_segname:
+                    curSeg.name.set_value( new_segname )
+                    seg_count += 1
 
     if( seq_count + seg_count > 0 ):
       flame.messages.show_in_console( "Strip Avid Crap: renamed " + str(seq_count) + " sequences and " + str(seg_count) + " segments", "info", 4 )
